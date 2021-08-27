@@ -36,7 +36,7 @@ repository_urls=(
     'https://github.com/mzamayias/programming-languages.git'
     'https://github.com/mzamayias/hearts_game_sort_of.git'
 )
-directory="/Users/mzamayias/Testing/Documents/Repositories/Uni"
+directory="/Users/mzamayias/Documents/Repositories/Uni"
 clone_repositories $directory "${repository_urls[@]}"
 
 repository_urls=(
@@ -45,7 +45,7 @@ repository_urls=(
     'https://github.com/mzamayias/brawl-control.git'
     'https://github.com/mzamayias/game_2048.git'
 )
-directory="/Users/mzamayias/Testing/Documents/Repositories/Flutter"
+directory="/Users/mzamayias/Documents/Repositories/Flutter"
 clone_repositories $directory "${repository_urls[@]}"
 
 repository_urls=(
@@ -53,5 +53,5 @@ repository_urls=(
     'https://github.com/mzamayias/dotfiles.git'
     'https://github.com/mzamayias/my100daysofcode.git'
 )
-directory="/Users/mzamayias/Testing/Documents/Repositories/Miscellaneous"
+directory="/Users/mzamayias/Documents/Repositories/Miscellaneous"
 clone_repositories $directory "${repository_urls[@]}"

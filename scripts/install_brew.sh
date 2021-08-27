@@ -10,3 +10,5 @@ install_homebrew() {
         return 1
     fi
 }
+
+install_homebrew

@@ -10,3 +10,5 @@ brew_bundle() {
         return 1
     fi
 }
+
+brew_bundle
