@@ -20,9 +20,9 @@ clone_repositories() {
         echo "Cloning ${repository_name} to $repository_directory."
         echo git clone "${repository_url}" "${repository_directory}" >>./.clone_repositories_log
         if git clone "${repository_url}" "${repository_directory}" 2>>./.clone_repositories_log; then
-            echo "Successfully cloned ${repository_name} to $repository_directory." >>./.clone_repositories_log
+            echo "Successfully cloned ${repository_name} to $repository_directory." 2>&1 | tee -a ./.clone_repositories_log
         else
-            echo "Failed to clone ${repository_name} to $repository_directory. Exiting." >>./.clone_repositories_log
+            echo "Failed to clone ${repository_name} to $repository_directory. Exiting." 2>&1 | tee -a ./.clone_repositories_log
             return 1
         fi
     done
@@ -50,7 +50,6 @@ clone_repositories $directory "${repository_urls[@]}"
 
 repository_urls=(
     'https://github.com/mzamayias/expert-palm-tree.git'
-    'https://github.com/mzamayias/dotfiles.git'
     'https://github.com/mzamayias/my100daysofcode.git'
 )
 directory="/Users/mzamayias/Documents/Repositories/Miscellaneous"
