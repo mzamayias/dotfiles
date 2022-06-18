@@ -1,4 +1,4 @@
-.DS_Store
 scripts/.main_log
 scripts/.clone_repositories_log
-.vscode/launch.json
+**/.DS_Store
+**/.vscode/launch.json
