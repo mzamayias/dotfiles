@@ -2,3 +2,4 @@ scripts/.main_log
 scripts/.clone_repositories_log
 **/.DS_Store
 **/.vscode/launch.json
+**/.idea
