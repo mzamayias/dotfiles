@@ -1,7 +1,10 @@
 # create a function called getDotfiles that returns all dotfiles from a directory
 getDotfiles() {
   local dotfiles
-  dotfiles=$(find $1 -type f -name ".*" -print)
+  # get all files in given directory
+  dotfiles=$(ls -a $1 .* | awk '{print $1}' | uniq | sort)
+  # dotfiles=$(ls -a $1 | grep -v "^\.$" | grep -v "^\.\..$")
+  # dotfiles=$(find . -name ".*")
   # print each dotfile in a line
   for dotfile in $dotfiles; do
     echo $dotfile

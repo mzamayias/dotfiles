@@ -1,22 +1,25 @@
-#!/opt/homebrew/Caskroom/miniforge/base/bin/python
-
 import os
 from pprint import pprint
 
 
 # create a function that lists all dotfiles in the home directory
-def list_dotfiles() -> list:
+def list_dotfiles_dotdirectories() -> dict:
     # create a list to store all dotfiles
     dotfiles = []
+    dotdirectories = []
     # create a list to store all files in the home directory
-    files = os.listdir('/Users/mzamayias')
+    items = os.listdir('/Users/mzamayias')
     # loop through the files in the home directory
-    for file in files:
+    for item in items:
         # if the file starts with a dot, add it to the dotfiles list
-        if file.startswith('.'):
-            dotfiles.append(file)
+        if item.startswith('.'):
+            entry = os.path.join('/Users/mzamayias', item)
+            if os.path.isfile(entry):
+                dotfiles.append(entry)
+            elif os.path.isdir(entry):
+                dotdirectories.append(entry)
     # return the dotfiles list
-    return dotfiles
+    return {'dotfiles': dotfiles, 'dotdirectories': dotdirectories}
 
 
 # create a function that movies all dotfiles from the home directory to the dotfiles directory
@@ -48,14 +51,15 @@ def link_dotfiles(dotfiles: list) -> None:
 
 if __name__ == '__main__':
     # call the list_dotfiles function
-    dotfiles = list_dotfiles()
+    dotfiles = list_dotfiles_dotdirectories()
     # print the dotfiles
-    pprint(dotfiles)
-    # call the copy_dotfiles function
-    move_dotfiles(dotfiles)
-    # print a message
-    print('Done!')
-    # call the link_dotfiles function
-    link_dotfiles(dotfiles)
-    # print a message
-    print('Done!')
+    pprint(dotfiles['dotfiles'][0])
+    # call cat on dotfiles['dotfiles'][0]
+    # # call the copy_dotfiles function
+    # move_dotfiles(dotfiles)
+    # # print a message
+    # print('Done!')
+    # # call the link_dotfiles function
+    # link_dotfiles(dotfiles)
+    # # print a message
+    # print('Done!')
