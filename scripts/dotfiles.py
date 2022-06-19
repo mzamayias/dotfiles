@@ -1,8 +1,11 @@
 import os
-from pprint import pprint
+
+HOME_DIR_PATH = '/Users/mzamayias'
+DOTFILE_REPOSITORY_PATH = '/Users/mzamayias/Documents/Repositories/Miscellaneous/dotfiles'
+DOTFILE_LOCATION_PATH = '/Users/mzamayias/Documents/Repositories/Miscellaneous/dotfiles/dotfiles'
 
 
-def list_dotfiles_dotdirectories() -> dict:
+def list_dotfiles_dotdirectories(path: str) -> dict:
     """
     List all dotfiles and dotdirectories in the home directory.
 
@@ -14,20 +17,23 @@ def list_dotfiles_dotdirectories() -> dict:
     dotdirectories = []
     symlinks = []
     # create a list to store all files in the home directory
-    items = os.listdir('/Users/mzamayias')
+    items = os.listdir(path)
     # loop through the files in the home directory
     for item in items:
         # if the file starts with a dot, add it to the dotfiles list
         if item.startswith('.'):
-            dotentry = os.path.join('/Users/mzamayias', item)
-            if os.path.isfile(dotentry):
-                dotfiles.append(dotentry)
-            if os.path.isdir(dotentry):
-                dotdirectories.append(dotentry)
+            dotentry = os.path.join(path, item)
             if os.path.islink(dotentry):
                 symlinks.append(dotentry)
+                continue
+            if os.path.isfile(dotentry):
+                dotfiles.append(dotentry)
+                continue
+            if os.path.isdir(dotentry):
+                dotdirectories.append(dotentry)
+                continue
     # return the dotfiles list
-    return {'dotfiles': dotfiles, 'dotdirectories': dotdirectories, 'symbolic_links': symlinks}
+    return {'dotfiles': sorted(dotfiles), 'dotdirectories': sorted(dotdirectories), 'symlinks': sorted(symlinks)}
 
 
 def move_dotentry(dotentry: str) -> None:
@@ -39,9 +45,15 @@ def move_dotentry(dotentry: str) -> None:
     """
     try:
         if os.path.isfile(dotentry):
-            os.rename(dotentry, os.path.join('/Users/mzamayias/dotfiles', dotentry))
+            os.rename(
+                dotentry,
+                os.path.join(DOTFILE_REPOSITORY_PATH, 'dotfiles', f'.{".".join(dotentry.split(".")[1:])}')
+            )
         elif os.path.isdir(dotentry):
-            os.rename(dotentry, os.path.join('/Users/mzamayias/dotdirectories', dotentry))
+            os.rename(
+                dotentry,
+                os.path.join(DOTFILE_REPOSITORY_PATH, 'dotdirectories', f'.{".".join(dotentry.split(".")[1:])}')
+            )
         else:
             print(f'Error: {dotentry} is not a dotentry.')
             raise Exception('Invalid dotentry.')
@@ -58,7 +70,10 @@ def link_dotentry(dotentry: str) -> None:
     """
     try:
         if not (os.path.islink(dotentry)):
-            os.symlink(dotentry, os.path.join('/Users/mzamayias', dotentry))
+            os.symlink(
+                src=item,
+                dst=item.replace(DOTFILE_LOCATION_PATH, HOME_DIR_PATH)
+            )
     except Exception as e:
         print(e)
 
@@ -72,19 +87,15 @@ def create_dotentry(dotentry: str) -> None:
     Args:
         dotentry (str): The dotentry to create.
     """
-    if not (os.path.islink(path=dotentry)):
-        if os.path.isfile(dotentry) or os.path.isdir(dotentry):
-            if os.path.isfile(dotentry):
-                print(f'{dotentry} is a dotfile')
-            elif os.path.isdir(dotentry):
-                print(f'{dotentry} is a dotdirectory')
-            # move_dotentry(dotentry)
-            # link_dotentry(dotentry)
+    if os.path.isfile(dotentry) or os.path.isdir(dotentry):
+        print(f'Creating dotentry for {dotentry}')
+        move_dotentry(dotentry)
+        link_dotentry(dotentry)
     else:
         print(f'{dotentry} is a symbolic link')
 
 
-def get_info(dotentry_data: dict) -> None:
+def get_dotentries_info(dotentry_data: dict) -> None:
     """
     Outputs information about the dotentries. Prints the total number of dotentries and the number of dotfiles in the
     home directory.
@@ -94,42 +105,64 @@ def get_info(dotentry_data: dict) -> None:
     """
     number_of_dotfiles = len(dotentry_data['dotfiles'])
     number_of_dotentries = len(dotentry_data['dotdirectories'])
-    number_of_symbolic_links = len(dotentry_data['symbolic_links'])
+    number_of_symbolic_links = len(dotentry_data['symlinks'])
     print(f'Total number of dotentries to create: {number_of_dotentries + number_of_dotfiles}')
     print(f'Number of dotfiles to create: {number_of_dotfiles}')
     print(f'Number of dotdirectories to create: {number_of_dotentries}')
     print(f'Number of symbolic links already in place: {number_of_symbolic_links}')
 
 
-def find_in_dotentries(data: dict) -> None:
+def find_in_dotentries(data: dict) -> dict:
     """
     Asks user to enter the name of a dotentry. It searches the data dictionary for the dotentry and returns the path of
     the dotentry.
 
     Args:
-        data (dict): The dotentries to find.
+        :param data:  The dotentries to find.
     """
-    dotentry = input('Enter the name of a dotentry: ')
+    query = input('Enter the name of a dotentry: ')
+    results = {}
     for key in data:
         for item in data[key]:
-            if item.endswith(dotentry):
-                print(f'\nFound dotentry: {dotentry} at {item} in {key}')
+            if query in item:
+                results.update({'query': query, 'item': item, 'key': key})
+    return results
+
+
+def show_dotentry_info(dotentry: str) -> None:
+    """
+    Shows information about a dotentry.
+
+    Args:
+        dotentry (str): The dotentry to show information about.
+    """
+    if input(f'Show contents of {dotentry}? (y/n): ') == 'y':
+        if os.path.isfile(dotentry):
+            os.system(f'cat {dotentry}')
+
+
+def scan_dotfiles_for_dotentries() -> dict:
+    """
+    Scans the home directory for dotfiles and dotdirectories.
+
+    Returns:
+        dict: A dictionary of dotfiles and dotdirectories.
+    """
+    # create a list to store all dotfiles
+    dotfiles = []
+    dotdirectories = []
 
 
 if __name__ == '__main__':
-    # call the list_dotfiles function
-    dotentries = list_dotfiles_dotdirectories()
-    get_info(dotentries)
-    # print the dotfiles
-    create_dotentry(dotentries['dotfiles'][10])
-    # call cat on dotfiles['dotfiles'][0]
-    os.system(f"cat {dotentries['dotfiles'][10]}")
-    find_in_dotentries(data=dotentries)
-    # # call the copy_dotfiles function
-    # move_dotfiles(dotfiles)
-    # # print a message
-    # print('Done!')
-    # # call the link_dotfiles function
-    # link_dotfiles(dotfiles)
-    # # print a message
-    # print('Done!')
+    get_dotentries_info(list_dotfiles_dotdirectories(HOME_DIR_PATH))
+    for key, value in list_dotfiles_dotdirectories(HOME_DIR_PATH).items():
+        if key == 'dotfiles':
+            for item in value:
+                # show_dotentry_info(item)
+                create_dotentry(item)
+    get_dotentries_info(list_dotfiles_dotdirectories(HOME_DIR_PATH))
+    get_dotentries_info(list_dotfiles_dotdirectories(DOTFILE_LOCATION_PATH))
+    # for key, value in list_dotfiles_dotdirectories(DOTFILE_LOCATION_PATH).items():
+    #     if key == 'dotfiles':
+    #         for item in value:
+    #             link_dotentry(item)
