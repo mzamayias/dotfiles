@@ -147,7 +147,6 @@ module.exports = {
         "hyper-prefers-color-scheme",
         "hyperterm-paste",
         "hyper-search",
-        "hyper-sync-settings",
         "hyper-quit",
     ],
     // in development, you can create a directory under
