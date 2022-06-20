@@ -16,6 +16,7 @@ def list_dotfiles_dotdirectories(path: str) -> dict:
     dotfiles = []
     dotdirectories = []
     symlinks = []
+    print(f'{path=}')
     # create a list to store all files in the home directory
     items = os.listdir(path)
     # loop through the files in the home directory
@@ -71,8 +72,8 @@ def link_dotentry(dotentry: str) -> None:
     try:
         if not (os.path.islink(dotentry)):
             os.symlink(
-                src=item,
-                dst=item.replace(DOTFILE_LOCATION_PATH, HOME_DIR_PATH)
+                src=dotentry,
+                dst=dotentry.replace(DOTFILE_LOCATION_PATH, HOME_DIR_PATH)
             )
     except Exception as e:
         print(e)
@@ -141,28 +142,16 @@ def show_dotentry_info(dotentry: str) -> None:
             os.system(f'cat {dotentry}')
 
 
-def scan_dotfiles_for_dotentries() -> dict:
-    """
-    Scans the home directory for dotfiles and dotdirectories.
-
-    Returns:
-        dict: A dictionary of dotfiles and dotdirectories.
-    """
-    # create a list to store all dotfiles
-    dotfiles = []
-    dotdirectories = []
-
-
 if __name__ == '__main__':
-    get_dotentries_info(list_dotfiles_dotdirectories(HOME_DIR_PATH))
-    for key, value in list_dotfiles_dotdirectories(HOME_DIR_PATH).items():
-        if key == 'dotfiles':
-            for item in value:
-                # show_dotentry_info(item)
-                create_dotentry(item)
-    get_dotentries_info(list_dotfiles_dotdirectories(HOME_DIR_PATH))
-    get_dotentries_info(list_dotfiles_dotdirectories(DOTFILE_LOCATION_PATH))
-    # for key, value in list_dotfiles_dotdirectories(DOTFILE_LOCATION_PATH).items():
+    # get_dotentries_info(list_dotfiles_dotdirectories(HOME_DIR_PATH))
+    # for key, value in list_dotfiles_dotdirectories(HOME_DIR_PATH).items():
     #     if key == 'dotfiles':
     #         for item in value:
-    #             link_dotentry(item)
+    #             # show_dotentry_info(item)
+    #             create_dotentry(item)
+    get_dotentries_info(list_dotfiles_dotdirectories(HOME_DIR_PATH))
+    get_dotentries_info(list_dotfiles_dotdirectories(DOTFILE_LOCATION_PATH))
+    for key, value in list_dotfiles_dotdirectories(DOTFILE_LOCATION_PATH).items():
+        if key == 'dotfiles':
+            for item in value:
+                link_dotentry(item)
