@@ -1,5 +1,5 @@
 # Fig pre block. Keep at the top of this file.
-. "$HOME/.fig/shell/zshrc.pre.zsh"
+[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -127,14 +127,14 @@ alias hyperjs="code ~/.hyper.js"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/mzamayias/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/Users/mzamayias/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/mzamayias/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/mzamayias/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/Users/mzamayias/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/mzamayias/opt/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/Users/mzamayias/anaconda3/bin:$PATH"
+        export PATH="/Users/mzamayias/opt/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -153,21 +153,21 @@ export NVM_DIR="$HOME/.nvm"
 # octave to use qt terminal
 export GNUTERM=qt
 # --- working android sdk setup without android studio, purely with android commandline tools installed from brew
-# export ANDROID_HOME="/opt/homebrew/share/android-commandlinetools"
-# export PATH=$PATH:$ANDROID_HOME/platform-tools:$PATH
-# export PATH=$PATH:$ANDROID_HOME/tools:$PATH
-# export PATH=$PATH:$ANDROID_HOME/emulator:$PATH
-# export PATH=$PATH:$ANDROID_HOME/ndk:$PATH
-# export PATH=$PATH:$ANDROID_HOME/patcher:$PATH
-# export ANDROID_SDK_ROOT=$ANDROID_HOME
-# --- working android sdk setup WITH android studio
-export ANDROID_HOME="/Users/mzamayias/Library/Android/sdk"
+export ANDROID_HOME="/opt/homebrew/share/android-commandlinetools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools:$PATH
 export PATH=$PATH:$ANDROID_HOME/tools:$PATH
 export PATH=$PATH:$ANDROID_HOME/emulator:$PATH
 export PATH=$PATH:$ANDROID_HOME/ndk:$PATH
 export PATH=$PATH:$ANDROID_HOME/patcher:$PATH
 export ANDROID_SDK_ROOT=$ANDROID_HOME
+# --- working android sdk setup WITH android studio
+# export ANDROID_HOME="/Users/mzamayias/Library/Android/sdk"
+# export PATH=$PATH:$ANDROID_HOME/platform-tools:$PATH
+# export PATH=$PATH:$ANDROID_HOME/tools:$PATH
+# export PATH=$PATH:$ANDROID_HOME/emulator:$PATH
+# export PATH=$PATH:$ANDROID_HOME/ndk:$PATH
+# export PATH=$PATH:$ANDROID_HOME/patcher:$PATH
+# export ANDROID_SDK_ROOT=$ANDROID_HOME
 # add inkscape to path
 export PATH="/opt/homebrew/opt/inkscape/bin:$PATH"
 # --- flutter fvm alias
@@ -188,4 +188,4 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # Fig post block. Keep at the bottom of this file.
-. "$HOME/.fig/shell/zshrc.post.zsh"
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
